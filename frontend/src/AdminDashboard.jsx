@@ -2,6 +2,29 @@
 import { useEffect, useState } from 'react'
 import './AdminDashboard.css'
 
+// Get the user's approval status even if the API uses a different field name.
+const getApprovalStatus = (user) => {
+  const status =
+    user.approval_status ??
+    user.approvalStatus ??
+    user.status
+
+  if (status) {
+    return String(status).toLowerCase()
+  }
+
+  if (user.is_approved === true) {
+    return 'approved'
+  }
+
+  if (user.is_approved === false) {
+    return 'pending'
+  }
+
+  // Default to pending when the API does not provide a status.
+  return 'pending'
+}
+
 function AdminDashboard() {
   const [users, setUsers] = useState([])
   const [flights, setFlights] = useState([])
@@ -43,6 +66,14 @@ function AdminDashboard() {
 
   const getToken = () => localStorage.getItem('access')
 
+  // Handle both normal and paginated API responses.
+  const getList = (data, key) => {
+    if (Array.isArray(data)) return data
+    if (Array.isArray(data?.results)) return data.results
+    if (Array.isArray(data?.[key])) return data[key]
+    return []
+  }
+
   // LOAD DASHBOARD STATISTICS
   const fetchStats = async () => {
     try {
@@ -56,10 +87,11 @@ function AdminDashboard() {
       )
 
       if (response.ok) {
-        setStats(await response.json())
+        const data = await response.json()
+        setStats(data)
       }
     } catch (error) {
-      console.error('Unable to load statistics.')
+      console.error('Unable to load statistics:', error)
     }
   }
 
@@ -78,13 +110,16 @@ function AdminDashboard() {
       const data = await response.json()
 
       if (!response.ok) {
-        setMessage('Unable to load users.')
+        setMessage(data.detail || 'Unable to load users.')
         return
       }
 
-      const userList = Array.isArray(data) ? data : data.results || []
+      const userList = getList(data, 'users')
+
       setUsers(userList)
-      setMessage(userList.length === 0 ? 'No registered users found.' : '')
+      setMessage(
+        userList.length === 0 ? 'No registered users found.' : ''
+      )
     } catch (error) {
       setMessage('Unable to connect to the server.')
     }
@@ -109,7 +144,8 @@ function AdminDashboard() {
         return
       }
 
-      const flightList = Array.isArray(data) ? data : data.results || []
+      const flightList = getList(data, 'flights')
+
       setFlights(flightList)
       setFlightMessage(
         flightList.length === 0 ? 'No flights available.' : ''
@@ -140,7 +176,8 @@ function AdminDashboard() {
         return
       }
 
-      const bookingList = Array.isArray(data) ? data : data.results || []
+      const bookingList = getList(data, 'bookings')
+
       setBookings(bookingList)
       setBookingMessage(
         bookingList.length === 0 ? 'No bookings found.' : ''
@@ -150,6 +187,7 @@ function AdminDashboard() {
     }
   }
 
+  // LOAD DASHBOARD DATA
   useEffect(() => {
     fetchStats()
     fetchUsers()
@@ -177,7 +215,8 @@ function AdminDashboard() {
         return
       }
 
-      alert(data.message)
+      alert(data.message || `User ${action}d successfully!`)
+
       fetchUsers()
       fetchStats()
     } catch (error) {
@@ -253,17 +292,17 @@ function AdminDashboard() {
     setEditingFlight(flight)
 
     setFlightForm({
-      airline: flight.airline,
-      flight_number: flight.flight_number,
-      departure_airport: flight.departure_airport,
-      arrival_airport: flight.arrival_airport,
-      departure_date: flight.departure_date,
-      departure_time: flight.departure_time,
-      arrival_time: flight.arrival_time,
-      price: flight.price,
-      total_seats: flight.total_seats,
-      available_seats: flight.available_seats,
-      status: flight.status,
+      airline: flight.airline || '',
+      flight_number: flight.flight_number || '',
+      departure_airport: flight.departure_airport || '',
+      arrival_airport: flight.arrival_airport || '',
+      departure_date: flight.departure_date || '',
+      departure_time: flight.departure_time || '',
+      arrival_time: flight.arrival_time || '',
+      price: flight.price || '',
+      total_seats: flight.total_seats || '',
+      available_seats: flight.available_seats || '',
+      status: flight.status || 'on_time',
     })
 
     setShowFlightForm(true)
@@ -293,6 +332,7 @@ function AdminDashboard() {
       }
 
       alert('Flight deleted successfully!')
+
       fetchFlights()
       fetchStats()
     } catch (error) {
@@ -305,12 +345,13 @@ function AdminDashboard() {
     const username = (user.username || '').toLowerCase()
     const email = (user.email || '').toLowerCase()
     const searchText = search.toLowerCase()
+    const approvalStatus = getApprovalStatus(user)
 
     const matchesSearch =
       username.includes(searchText) || email.includes(searchText)
 
     const matchesFilter =
-      filter === 'all' || user.approval_status === filter
+      filter === 'all' || approvalStatus === filter
 
     return matchesSearch && matchesFilter
   })
@@ -378,28 +419,28 @@ function AdminDashboard() {
               <div className="admin-stat-card">
                 <span className="stat-icon blue">♙</span>
                 <p>Total Users</p>
-                <h2>{stats.total_users}</h2>
+                <h2>{stats.total_users ?? 0}</h2>
                 <small>Registered users</small>
               </div>
 
               <div className="admin-stat-card">
                 <span className="stat-icon orange">◷</span>
                 <p>Pending Approvals</p>
-                <h2>{stats.pending_users}</h2>
+                <h2>{stats.pending_users ?? 0}</h2>
                 <small>Awaiting approval</small>
               </div>
 
               <div className="admin-stat-card">
                 <span className="stat-icon purple">✈</span>
                 <p>Total Flights</p>
-                <h2>{stats.total_flights}</h2>
+                <h2>{stats.total_flights ?? 0}</h2>
                 <small>Flight records</small>
               </div>
 
               <div className="admin-stat-card">
                 <span className="stat-icon green">▣</span>
                 <p>Total Bookings</p>
-                <h2>{stats.total_bookings}</h2>
+                <h2>{stats.total_bookings ?? 0}</h2>
                 <small>Booking records</small>
               </div>
             </section>
@@ -450,46 +491,53 @@ function AdminDashboard() {
                 </thead>
 
                 <tbody>
-                  {filteredUsers.map((user) => (
-                    <tr key={user.id}>
-                      <td>
-                        <strong>{user.username}</strong>
-                      </td>
-                      <td>{user.email}</td>
-                      <td>
-                        <span
-                          className={`status-badge ${user.approval_status}`}
-                        >
-                          {user.approval_status}
-                        </span>
-                      </td>
-                      <td>
-                        {user.approval_status === 'pending' ? (
-                          <div className="action-buttons">
-                            <button
-                              className="approve-btn"
-                              onClick={() =>
-                                handleApproval(user.id, 'approve')
-                              }
-                            >
-                              Approve
-                            </button>
+                  {filteredUsers.map((user) => {
+                    const approvalStatus = getApprovalStatus(user)
 
-                            <button
-                              className="reject-btn"
-                              onClick={() =>
-                                handleApproval(user.id, 'reject')
-                              }
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        ) : (
-                          <span className="no-action">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                    return (
+                      <tr key={user.id}>
+                        <td>
+                          <strong>{user.username || '—'}</strong>
+                        </td>
+
+                        <td>{user.email || '—'}</td>
+
+                        <td>
+                          <span
+                            className={`status-badge ${approvalStatus}`}
+                          >
+                            {approvalStatus}
+                          </span>
+                        </td>
+
+                        <td>
+                          {approvalStatus === 'pending' ? (
+                            <div className="action-buttons">
+                              <button
+                                className="approve-btn"
+                                onClick={() =>
+                                  handleApproval(user.id, 'approve')
+                                }
+                              >
+                                Approve
+                              </button>
+
+                              <button
+                                className="reject-btn"
+                                onClick={() =>
+                                  handleApproval(user.id, 'reject')
+                                }
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="no-action">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
 
@@ -512,9 +560,15 @@ function AdminDashboard() {
               <button
                 className="approve-btn"
                 onClick={() => {
-                  setEditingFlight(null)
-                  setFlightForm(emptyFlightForm)
-                  setShowFlightForm(!showFlightForm)
+                  if (showFlightForm) {
+                    setShowFlightForm(false)
+                    setEditingFlight(null)
+                    setFlightForm(emptyFlightForm)
+                  } else {
+                    setEditingFlight(null)
+                    setFlightForm(emptyFlightForm)
+                    setShowFlightForm(true)
+                  }
                 }}
               >
                 {showFlightForm ? 'Close Form' : '+ Add Flight'}
@@ -720,8 +774,10 @@ function AdminDashboard() {
                       </td>
 
                       <td>
-                        <span className={`status-badge ${flight.status}`}>
-                          {flight.status.replace('_', ' ')}
+                        <span
+                          className={`status-badge ${flight.status || ''}`}
+                        >
+                          {(flight.status || 'unknown').replace('_', ' ')}
                         </span>
                       </td>
 
@@ -785,36 +841,45 @@ function AdminDashboard() {
                   {bookings.map((booking) => (
                     <tr key={booking.id}>
                       <td>
-                        <strong>{booking.pnr}</strong>
-                      </td>
-
-                      <td>{booking.user_name || `User ${booking.user}`}</td>
-
-                      <td>
-                        {booking.flight_number || booking.flight_details}
+                        <strong>{booking.pnr || '—'}</strong>
                       </td>
 
                       <td>
-                        {booking.departure_airport && booking.arrival_airport
+                        {booking.user_name || `User ${booking.user || ''}`}
+                      </td>
+
+                      <td>
+                        {booking.flight_number ||
+                          booking.flight_details ||
+                          '—'}
+                      </td>
+
+                      <td>
+                        {booking.departure_airport &&
+                        booking.arrival_airport
                           ? `${booking.departure_airport} → ${booking.arrival_airport}`
                           : '—'}
                       </td>
 
-                      <td>{booking.seats_booked}</td>
+                      <td>{booking.seats_booked ?? '—'}</td>
 
-                      <td>₹{booking.total_price}</td>
+                      <td>₹{booking.total_price ?? '—'}</td>
 
                       <td>
-                        <span className={`status-badge ${booking.status}`}>
-                          {booking.status}
+                        <span
+                          className={`status-badge ${booking.status || ''}`}
+                        >
+                          {booking.status || '—'}
                         </span>
                       </td>
 
                       <td>
                         <span
-                          className={`status-badge ${booking.payment_status}`}
+                          className={`status-badge ${
+                            booking.payment_status || ''
+                          }`}
                         >
-                          {booking.payment_status}
+                          {booking.payment_status || '—'}
                         </span>
                         <br />
                         <small>
