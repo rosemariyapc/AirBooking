@@ -1,0 +1,534 @@
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #26364a;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: #142b49;
+  color: white;
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 45px;
+}
+
+.brand-icon {
+  background: #2879c7;
+  padding: 9px 11px;
+  border-radius: 9px;
+}
+
+.sidebar-label {
+  color: #9aadc4;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin: 0 0 15px 10px;
+}
+
+.sidebar-link {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #d6e0ed;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: #2879c7;
+  color: white;
+}
+
+.sidebar-link span {
+  font-size: 19px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid #344b68;
+  padding: 20px 8px 0;
+  color: #aebdd0;
+  font-size: 11px;
+}
+
+.sidebar-footer p {
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 35px;
+  box-sizing: border-box;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-topbar h2 {
+  margin: 0 0 6px;
+  color: #172e4d;
+  font-size: 22px;
+}
+
+.admin-topbar p {
+  margin: 0;
+  color: #8794a5;
+  font-size: 13px;
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.profile-avatar {
+  background: #dcecff;
+  color: #1769aa;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.admin-welcome {
+  margin: 30px 0 25px;
+}
+
+.admin-welcome h1 {
+  color: #172e4d;
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+
+.admin-welcome p {
+  color: #8491a3;
+  margin: 0;
+  font-size: 14px;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.admin-stat-card {
+  background: white;
+  padding: 22px;
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(30, 55, 90, 0.04);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  margin-bottom: 15px;
+}
+
+.stat-icon.blue {
+  background: #e6f1ff;
+  color: #2674c4;
+}
+
+.stat-icon.orange {
+  background: #fff0dc;
+  color: #d88725;
+}
+
+.stat-icon.purple {
+  background: #f0e9ff;
+  color: #8257c7;
+}
+
+.stat-icon.green {
+  background: #e2f7eb;
+  color: #27965b;
+}
+
+.admin-stat-card p {
+  color: #7e8b9b;
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.admin-stat-card h2 {
+  color: #1b3454;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.admin-stat-card small {
+  color: #9ba6b4;
+  font-size: 11px;
+}
+
+.admin-content-card {
+  background: white;
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 28px;
+  box-shadow: 0 3px 12px rgba(30, 55, 90, 0.04);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading h2,
+.admin-content-card > h2 {
+  color: #1b3454;
+  font-size: 20px;
+  margin: 0 0 7px;
+}
+
+.section-heading p,
+.admin-content-card > p {
+  color: #8995a5;
+  font-size: 13px;
+  margin: 0;
+}
+
+.user-count {
+  background: #eaf3ff;
+  color: #2874b8;
+  padding: 8px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.user-tools {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.user-tools input,
+.user-tools select {
+  padding: 12px;
+  border: 1px solid #dce3ec;
+  border-radius: 7px;
+  font-size: 13px;
+  background: white;
+  outline: none;
+}
+
+.user-tools input {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-tools input:focus,
+.user-tools select:focus {
+  border-color: #2879c7;
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.admin-table th {
+  background: #f5f8fc;
+  color: #77869a;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 15px;
+}
+
+.admin-table td {
+  padding: 16px 15px;
+  border-bottom: 1px solid #edf1f5;
+  color: #58677a;
+}
+
+.admin-table td strong {
+  color: #253c5b;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status-badge.approved {
+  background: #e4f7ec;
+  color: #23844e;
+}
+
+.status-badge.pending {
+  background: #fff2df;
+  color: #b87920;
+}
+
+.status-badge.rejected {
+  background: #fde9e9;
+  color: #c04c4c;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.approve-btn {
+  background: #e2f6e9;
+  color: #24834b;
+}
+
+.reject-btn {
+  background: #fdeaea;
+  color: #c04c4c;
+}
+
+.approve-btn:hover {
+  background: #c8edd5;
+}
+
+.reject-btn:hover {
+  background: #f8d4d4;
+}
+
+.no-action {
+  color: #aab4c0;
+}
+
+.empty-users {
+  text-align: center;
+  color: #8b98a8;
+  padding: 25px;
+}
+
+@media (max-width: 1000px) {
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    min-width: 0;
+    padding: 16px;
+  }
+
+  .admin-brand {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-label,
+  .sidebar-footer {
+    display: none;
+  }
+
+  .sidebar-link {
+    display: inline-flex;
+    width: auto;
+    margin-right: 5px;
+    padding: 10px;
+  }
+
+  .admin-main {
+    padding: 18px 12px;
+  }
+
+  .admin-stats {
+    gap: 10px;
+  }
+
+  .admin-stat-card {
+    padding: 15px;
+  }
+
+  .admin-topbar {
+    flex-wrap: wrap;
+  }
+
+  .user-tools {
+    flex-direction: column;
+  }
+
+  .admin-content-card {
+    padding: 15px;
+  }
+}
+
+/* Flight form layout */
+.flight-form {
+  background: #f8fafc;
+  padding: 28px;
+  margin: 25px 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+.flight-form h3 {
+  text-align: center;
+  color: #17365d;
+  font-size: 24px;
+  margin-bottom: 25px;
+}
+
+.flight-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: end;
+}
+
+.flight-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.flight-form-grid input,
+.flight-form-grid select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.flight-form-grid input:focus,
+.flight-form-grid select:focus {
+  outline: none;
+  border-color: #2878c7;
+  box-shadow: 0 0 0 3px rgba(40, 120, 199, 0.12);
+}
+
+.flight-form button {
+  margin-top: 20px;
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 17px 14px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 17px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+  background: #f8fafc;
+}
+
+@media (max-width: 1000px) {
+  .flight-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .flight-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-form {
+    padding: 18px;
+  }
+}

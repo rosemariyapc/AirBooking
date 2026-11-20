@@ -1,0 +1,22 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Django database and environment secrets
+db.sqlite3
+.env
+.env.*
+
+# React
+node_modules/
+dist/
+
+# IDE settings
+.idea/
+.vscode/
+
+# Generated files
+*.log
