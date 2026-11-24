@@ -93,7 +93,6 @@ AirBooking/
 
 The following screenshots demonstrate the main functionalities of the AirBooking application.
 
-
 ### Home Page
 ![Home Page](screenshots/home.png)
 
@@ -104,7 +103,7 @@ The following screenshots demonstrate the main functionalities of the AirBooking
 ![Login](screenshots/login.png)
 
 ### My Trips
-![My Trips](screenshots/my_bookings.png)
+![My Trips](screenshots/my_trips.png)
 
 ### Admin Dashboard
 ![Admin Dashboard](screenshots/admin_dashboard.png)
@@ -117,7 +116,7 @@ The following screenshots demonstrate the main functionalities of the AirBooking
 
 ### Manage Bookings
 ![Manage Bookings](screenshots/manage_bookings.png)
----
+
 
 ## ⚙️ Installation and Setup
 
